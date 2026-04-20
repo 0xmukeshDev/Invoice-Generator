@@ -1,0 +1,8 @@
+.invoice-row {
+    overflow-x: auto;
+    align-items: center;
+}
+
+.slds-col {
+    min-width: 150px;
+}

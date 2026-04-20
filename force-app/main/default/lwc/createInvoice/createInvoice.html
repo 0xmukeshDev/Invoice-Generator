@@ -1,0 +1,78 @@
+<template>
+    <lightning-card title="Create Invoice">
+        <template if:true={isLoading}>
+            <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+        </template>
+        <!-- Step 1 -->
+        <template if:true={isStep1} >
+            <div class="slds-m-around_medium">
+
+           
+            <template lwc:if={lineItems.length}>
+
+                <lightning-record-edit-form object-api-name="Opportunity" record-id={recordId}>
+                    <lightning-input-field field-name="Id" value={recordId}></lightning-input-field>
+                    <lightning-input-field field-name="AccountId" ></lightning-input-field>
+                </lightning-record-edit-form>
+    
+                <lightning-button label="Next" onclick={handleNext}></lightning-button>
+            </template>
+            <template lwc:else>
+                <p>No Prodcuts added in the opportunity</p>
+            </template>
+             </div>
+        </template>
+
+        <!-- Step 2 -->
+        <template if:true={isStep2}>
+            <div class="slds-grid slds-wrap slds-gutters slds-m-around_small invoice-row">
+
+            
+            <template for:each={lineItems} for:item="item" for:index="index">
+                <div key={item.id} class="slds-grid slds-wrap  slds-gutters slds-m-around_small slds-align_absolute-center ">
+
+                    <lightning-input class="slds-col slds-size_1-of-4" label="Product" value={item.productName} disabled></lightning-input>
+
+                    <lightning-input class="slds-col slds-size_1-of-4" type="number" label="Qty"
+                        data-index={index}
+                        value={item.quantity}
+                        onchange={handleQtyChange}
+                        min="1"
+                        required>
+                    </lightning-input>
+
+                    <lightning-input class="slds-col slds-size_1-of-4" type="number" label="Price"
+                        data-index={index}
+                        value={item.price}
+                        min="1"
+                        required
+                        onchange={handlePriceChange}>
+                    </lightning-input>
+                    <lightning-input class="slds-col slds-size_1-of-4 "
+                        type="number"
+                        label="Total"
+                        value={item.total}
+                        disabled>
+                    </lightning-input>
+                    <!-- <div class="slds-align_absolute-center">
+
+                        <p>Total : {item.total}</p>
+                    </div> -->
+                </div>
+            </template>
+
+            <div class="slds-m-around_medium slds-text-align_right">
+
+            <h2 class="slds-text-heading_medium">
+                Total Amount: {totalAmount}
+            </h2>
+
+        </div>
+            <div class="slds-m-around_medium slds-text-align_center">
+            <lightning-button label="Save" onclick={handleSave} disabled={isLoading} class="slds-m-top_small"></lightning-button>
+            </div>
+            </div>
+        </template>
+
+    </lightning-card>
+</template>
