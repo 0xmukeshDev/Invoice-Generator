@@ -130,7 +130,15 @@ sf org open
 ---
 
 ## ▶️ How to Use
+After deploying and opening the Salesforce org:
 
+1. Navigate to the App
+
+From the App Launcher (☰), search for:
+
+👉 Invoice Generator App
+
+Open the application.
 1. Go to an Opportunity record
 2. Click **"Create Invoice" Quick Action**
 3. Step 1:
