@@ -1,5 +1,11 @@
 <template>
     <lightning-card title="Create Invoice">
+         <div class="slds-m-around_medium">
+            <lightning-progress-indicator current-step={currentStep} type="path" variant="base">
+                <lightning-progress-step label="Opportunity details" value="step1"></lightning-progress-step>
+                <lightning-progress-step label="Edit Line Items" value="step2"></lightning-progress-step>
+            </lightning-progress-indicator>
+        </div>
         <template if:true={isLoading}>
             <lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
         </template>
@@ -9,16 +15,16 @@
 
            
             <template lwc:if={lineItems.length}>
-
                 <lightning-record-edit-form object-api-name="Opportunity" record-id={recordId}>
-                    <lightning-input-field field-name="Id" value={recordId}></lightning-input-field>
-                    <lightning-input-field field-name="AccountId" ></lightning-input-field>
+                    <lightning-input-field field-name="Name" disabled></lightning-input-field>
+                    <lightning-input-field field-name="AccountId" disabled ></lightning-input-field>
+                    <lightning-input-field field-name="OwnerId" disabled ></lightning-input-field>
                 </lightning-record-edit-form>
     
                 <lightning-button label="Next" onclick={handleNext}></lightning-button>
             </template>
             <template lwc:else>
-                <p>No Prodcuts added in the opportunity</p>
+                <p>No Products added in the opportunity</p>
             </template>
              </div>
         </template>
@@ -68,10 +74,20 @@
             </h2>
 
         </div>
-            <div class="slds-m-around_medium slds-text-align_center">
-            <lightning-button label="Save" onclick={handleSave} disabled={isLoading} class="slds-m-top_small"></lightning-button>
-            </div>
-            </div>
+    </div>
+    <div class="slds-m-around_medium slds-text-align_center">
+        <lightning-button 
+            label="Back"
+            onclick={handleBack}
+            class="slds-m-right_small">
+        </lightning-button>
+        <lightning-button 
+        label="Save" 
+        variant="brand" 
+        onclick={handleSave} 
+        disabled={isLoading} 
+        class="slds-m-top_small"></lightning-button>
+    </div>
         </template>
 
     </lightning-card>

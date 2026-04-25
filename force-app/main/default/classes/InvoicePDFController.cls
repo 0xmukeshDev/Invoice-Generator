@@ -11,7 +11,7 @@ public class InvoicePDFController {
         if(invoiceId != null){
 
             invoiceHeader = [
-                SELECT Id, Account__r.name, Opportunity__r.name,CreatedDate from Invoice__c where id = :invoiceId LIMIT 1
+                SELECT Id, Account__r.name, Opportunity__r.name,Total_Amount__c CreatedDate from Invoice__c where id = :invoiceId LIMIT 1
             ];
     
             lines = [
@@ -24,17 +24,12 @@ public class InvoicePDFController {
     }
 
     public String getFormattedInvoiceNumber() {
-    if (invoiceHeader == null || invoiceHeader.Id == null) {
-        return '';
-    }
-    String idStr = String.valueOf(invoiceHeader.Id);
-    // Get last 4 characters of Id
-    String last4 = idStr.substring(idStr.length() - 4);
-
-    // Format date (YYYYMMDD)
-    String datePart = invoiceHeader.CreatedDate.format('yyyyMMdd');
-
-    // Combine
-    return 'INV-' + datePart + '-' + last4;
+        if (invoiceHeader == null || invoiceHeader.Id == null) {
+            return '';
+        }
+        String idStr = String.valueOf(invoiceHeader.Id);
+        String last4 = idStr.substring(idStr.length() - 4);
+        String datePart = invoiceHeader.CreatedDate.format('yyyyMMdd');
+        return 'INV-' + datePart + '-' + last4;
 }
 }

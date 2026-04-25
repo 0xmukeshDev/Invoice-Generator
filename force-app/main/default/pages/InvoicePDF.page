@@ -26,5 +26,8 @@
         </apex:repeat>
 
     </table>
+    <div style="text-align:right; margin-top:20px;">
+    <p><b>Total Amount: {!invoiceHeader.Total_Amount__c}</b></p>
+</div>
 
 </apex:page>

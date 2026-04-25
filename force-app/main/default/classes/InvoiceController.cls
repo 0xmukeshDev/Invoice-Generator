@@ -10,22 +10,8 @@ public with sharing class InvoiceController {
             WHERE Id = :oppId
         ];
     }
-    // @AuraEnabled
-    // public static Id createInvoice(Id oppId, List<Invoice_Line__c> lines){
-    //     Opportunity opp = [SELECT Id, AccountId FROM Opportunity WHERE Id = :oppId];
-    //     Invoice__c inv = new Invoice__c(
-    //         Opportunity__c = opp.Id,
-    //         Account__c = opp.AccountId
-    //     );
-    //     insert inv;
-    //     for(Invoice_Line__c line : lines){
-    //         line.Invoice__c = inv.Id;
-    //     }
-    //     insert lines;
-    //     return inv.Id;
-    // }
     @AuraEnabled
-public static Id createInvoice(Id oppId, List<Invoice_Line__c> lines){
+public static Id createInvoice(Id oppId, List<Invoice_Line__c> lines,Decimal totalAmt){
     Savepoint sp = Database.setSavepoint();
     try {
         Opportunity opp = [
@@ -36,7 +22,8 @@ public static Id createInvoice(Id oppId, List<Invoice_Line__c> lines){
         ];
         Invoice__c inv = new Invoice__c(
             Opportunity__c = opp.Id,
-            Account__c = opp.AccountId
+            Account__c = opp.AccountId,
+            Total_Amount__c = totalAmt
         );
         insert inv;
         if(lines != null && !lines.isEmpty()){
@@ -86,11 +73,8 @@ public static Id createInvoice(Id oppId, List<Invoice_Line__c> lines){
         link.ShareType = 'V';
         insert link;
 
-        // Return ContentVersion Id (for download)
+        // Return ContentVersion Id for download
         return cv.Id;
     }
-// @AuraEnabled
-//     public static String getPdfUrl(Id invoiceId) {
-//         return '/apex/InvoicePDF?id=' + invoiceId;
-//     }
+
 }

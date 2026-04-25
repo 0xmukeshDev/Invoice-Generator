@@ -5,12 +5,14 @@ import { NavigationMixin } from 'lightning/navigation';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent'
 import generateAndAttachPdf from '@salesforce/apex/InvoiceController.generateAndAttachPdf';
 export default class CreateInvoice extends NavigationMixin(LightningElement) {
-    @api recordId; // Opportunity Id
+    @api recordId; 
     isStep1 = true;
     isStep2 = false;
     @track lineItems = [];
     isLoading = false;
+    currentStep = 'step1';
 
+    //Gets Opportunity Products details
      @wire(getOpportunityWithProducts, { oppId: '$recordId' })
     wiredOpp({ data, error }) {
         this.isLoading = true;
@@ -36,6 +38,12 @@ export default class CreateInvoice extends NavigationMixin(LightningElement) {
     handleNext() {
         this.isStep1 = false;
         this.isStep2 = true;
+        this.currentStep = 'step2';
+    }
+    handleBack() {
+        this.isStep1 = true;
+        this.isStep2 = false;
+        this.currentStep = 'step1';
     }
     handleQtyChange(event) {
         const index = event.target.dataset.index;
@@ -55,6 +63,8 @@ export default class CreateInvoice extends NavigationMixin(LightningElement) {
     get totalAmount() {
         return this.lineItems.reduce((sum, item) => sum + item.total, 0);
     }
+
+    //Invoice creation and genrating the PDF
     handleSave() {
         this.isLoading = true;
 
@@ -71,8 +81,9 @@ export default class CreateInvoice extends NavigationMixin(LightningElement) {
             };
         });
         console.log("oppid", this.recordId, JSON.stringify(lines));
+       
         
-        createInvoice({ oppId: this.recordId, lines: lines })
+        createInvoice({ oppId: this.recordId, lines: lines, totalAmt: this.totalAmount })
         .then(invId => {
 
             return generateAndAttachPdf({ invoiceId: invId })
@@ -80,8 +91,10 @@ export default class CreateInvoice extends NavigationMixin(LightningElement) {
                     console.log('FileId:', fileId);
             this.isLoading = false;
             console.log("invId", invId);
+
             // const pdfUrl = `/apex/InvoicePDF?id=${invId}`;
             //     window.open(pdfUrl, '_blank');
+
             const downloadUrl = `/sfc/servlet.shepherd/version/download/${fileId}`;
             window.open(downloadUrl, '_blank');
             this.showToastMessage("Success","Invoice Created", "success")
