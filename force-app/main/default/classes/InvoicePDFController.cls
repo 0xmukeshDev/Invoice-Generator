@@ -11,7 +11,7 @@ public class InvoicePDFController {
         if(invoiceId != null){
 
             invoiceHeader = [
-                SELECT Id, Account__r.name, Opportunity__r.name,Total_Amount__c CreatedDate from Invoice__c where id = :invoiceId LIMIT 1
+                SELECT Id, Account__r.name, Opportunity__r.name,Total_Amount__c, CreatedDate from Invoice__c where id = :invoiceId LIMIT 1
             ];
     
             lines = [
