@@ -1,0 +1,1 @@
+export const FILE_DOWNLOAD_BASE_URL = '/sfc/servlet.shepherd/version/download/';

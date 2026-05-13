@@ -4,6 +4,7 @@ import createInvoice from '@salesforce/apex/InvoiceController.createInvoice';
 import { NavigationMixin } from 'lightning/navigation';
 import {ShowToastEvent} from 'lightning/platformShowToastEvent'
 import generateAndAttachPdf from '@salesforce/apex/InvoiceController.generateAndAttachPdf';
+import { FILE_DOWNLOAD_BASE_URL } from './constant';
 export default class CreateInvoice extends NavigationMixin(LightningElement) {
     @api recordId; 
     isStep1 = true;
@@ -95,7 +96,7 @@ export default class CreateInvoice extends NavigationMixin(LightningElement) {
             // const pdfUrl = `/apex/InvoicePDF?id=${invId}`;
             //     window.open(pdfUrl, '_blank');
 
-            const downloadUrl = `/sfc/servlet.shepherd/version/download/${fileId}`;
+            const downloadUrl = `${FILE_DOWNLOAD_BASE_URL}${fileId}`;
             window.open(downloadUrl, '_blank');
             this.showToastMessage("Success","Invoice Created", "success")
             
